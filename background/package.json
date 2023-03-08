@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "PORT=3001 nodemon ./bin/www"
+    "start": "PORT=3001 nodemon ./bin/www",
+    "build": "rm -rf build && cd ../front && npm run build && cp -r build ../background ",
+    "clound":"node ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
