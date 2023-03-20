@@ -1,13 +1,8 @@
-import React from 'react';
 import logo from './logo.svg';
+import Footer from './components/Footer';
 import './App.css';
-import axios from 'axios';
 
 function App() {
-  const request=axios.get('/users');
-  request.then(res=>{
-    console.log(res.data);
-  })
   return (
     <div className="App">
       <header className="App-header">
@@ -24,6 +19,7 @@ function App() {
           Learn React
         </a>
       </header>
+      <Footer></Footer>
     </div>
   );
 }
