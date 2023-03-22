@@ -5,14 +5,17 @@
   "scripts": {
     "start": "PORT=3001 nodemon ./bin/www",
     "build": "rm -rf build && cd ../front && npm run build && cp -r build ../background ",
-    "clound":"node ./bin/www"
+    "clound": "node ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.2",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.21"
   }

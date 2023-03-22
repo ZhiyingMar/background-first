@@ -3,6 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const mongoose = require('mongoose')
+const config = require('./utils/config')
+require("dotenv").config();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -13,6 +16,15 @@ var app = express();
 // __dirname,代表当前文件路径
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+console.info('connecting to', config.MONGODB_URI)
+mongoose.connect(config. MONGODB_URI)
+  .then(() => {
+    console.info('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.error('error connecting to MongoDB:', error.message)
+  })
 
 app.use(logger('dev'));
 app.use(express.json());
