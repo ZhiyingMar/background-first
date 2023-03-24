@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema({
-  
     //mongoose中的验证功能
     content:{
       type:String,
