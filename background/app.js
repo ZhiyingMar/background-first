@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require('cors')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
 const loginRouter=require('./routes/login')
@@ -15,7 +16,7 @@ const app = express();
 // view engine setup
 // __dirname,代表当前文件路径
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'jade'); 
 
 console.info('connecting to', config.MONGODB_URI)
 mongoose.connect(config. MONGODB_URI)
@@ -26,6 +27,7 @@ mongoose.connect(config. MONGODB_URI)
     console.error('error connecting to MongoDB:', error.message)
   })
 
+app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

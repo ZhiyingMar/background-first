@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import {login} from "@/services/login"
 import "./Login.css";
 const Login = (props: any) => {
     const [validated, setValidated] = useState(false);
@@ -18,6 +19,7 @@ const Login = (props: any) => {
             password:form.formPassword.value
         }
         console.log(data);
+        login();
       
         setValidated(true);
     }
