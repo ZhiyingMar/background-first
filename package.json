@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "PORT=3001 nodemon ./bin/www",
-    "build": "rm -rf build && cd ../front && npm run build && cp -r build ../background ",
+    "start": "node ./bin/www",
+    "dev":"PORT=3001 nodemon ./bin/www",
     "clound": "node ./bin/www"
   },
   "dependencies": {
