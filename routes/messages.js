@@ -4,11 +4,11 @@ const Note = require("../models/message");
 const User = require("../models/user");
 
 const jwt = require("jsonwebtoken");
+const config = require('../utils/config')
 
 // token的截取
 const getTokenFrom = (request) => {
   const authorization = request?.get("authorization") ?? null;
-  console.log('aaa',authorization);
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
     return authorization.replace('Bearer ', '');
   }
@@ -36,25 +36,27 @@ messagesRouter.get("/:id", async (request, response, next) => {
 
 // 添加
 messagesRouter.post("/", async (request, response) => {
-  const body = request.body
+  // try {
+    const body = request.body
+    const decodedToken = jwt.verify(getTokenFrom(request), config.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+    const user = await User.findById(decodedToken.id);
+  
+    const messgae = new Note({
+      content: body.content,
+      date: new Date(),
+      user: user._id,
+      username:user.username
+    });
+    const savedNote = await messgae.save();
+  
+    response.json(savedNote);
+  // } catch (error) {
+  //   next(error)
+  // }
 
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
-  }
-
-
-  const user = await User.findById(decodedToken.id);
-
-  const messgae = new Note({
-    content: body.content,
-    date: new Date(),
-    user: user._id,
-    username:user.username
-  });
-  const savedNote = await messgae.save();
-
-  response.json(savedNote);
 });
 // 删除留言
 messagesRouter.delete("/:id", async (request, response, next) => {
@@ -77,7 +79,7 @@ messagesRouter.delete("/:id", async (request, response, next) => {
 // 更新留言
 messagesRouter.put("/:id", async (request, response, next) => {
   const body = request.body;
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  const decodedToken = jwt.verify(getTokenFrom(request), config.SECRET)
   if (!decodedToken?.id) {
     return response.status(401).json({ error: "请登录" });
   }

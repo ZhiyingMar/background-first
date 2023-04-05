@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+// 全局异常捕获的库（需要放到app的前面）
+require('express-async-errors');
 const app = express();
 const cors = require('cors')
 const mongoose = require('mongoose')
@@ -19,6 +21,7 @@ const middleware = require('./utils/middleware');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade'); 
 
+mongoose.set('strictQuery', false)
 console.info('connecting to', config.MONGODB_URI)
 mongoose.connect(config. MONGODB_URI)
   .then(() => {

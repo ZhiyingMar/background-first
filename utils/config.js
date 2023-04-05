@@ -6,6 +6,9 @@ const MONGODB_URI = `mongodb+srv://zhiying:${process.env.PASSWORD}@cluster0.0eob
     ? 'message'
     : 'testMessage'
 }?retryWrites=true&w=majority`;
+
+const SECRET=process.env.SECRET
 module.exports = {
   MONGODB_URI,
+  SECRET
 };
