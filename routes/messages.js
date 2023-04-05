@@ -1,9 +1,19 @@
 // 路由的事件处理
-const jwt = require("jsonwebtoken");
 const messagesRouter = require("express").Router();
-
 const Note = require("../models/message");
 const User = require("../models/user");
+
+const jwt = require("jsonwebtoken");
+
+// token的截取
+const getTokenFrom = (request) => {
+  const authorization = request?.get("authorization") ?? null;
+  console.log('aaa',authorization);
+  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
+    return authorization.replace('Bearer ', '');
+  }
+  return null;
+};
 
 messagesRouter.get("/", async (request, response) => {
   const { pageIndex, pageSize } = request.query;
@@ -22,25 +32,17 @@ messagesRouter.get("/:id", async (request, response, next) => {
   }
 });
 
-// token的截取
-const getTokenFrom = (request) => {
-  const authorization = request?.get("authorization") ?? null;
-  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
-    return authorization.substring(7);
-  }
-  return null;
-};
+
 
 // 添加
 messagesRouter.post("/", async (request, response) => {
-  const body = request.body;
+  const body = request.body
 
-  // 返回令牌所基于的对象
   const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-
-  if (!decodedToken?.id) {
-    return response.status(401).json({ error: "请登录" });
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
   }
+
 
   const user = await User.findById(decodedToken.id);
 
