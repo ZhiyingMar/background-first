@@ -4,16 +4,19 @@ const messageSchema = new mongoose.Schema({
     //mongoose中的验证功能
     content:{
       type:String,
-      minLength:5,
+      // minLength:5,
       required:true
     },
     date:{
       type:Date,
       required:true
     },
-    important:Boolean,
     user:{
       type:mongoose.Schema.Types.ObjectId,
+      ref:'User'
+    },
+    username:{
+      type:String,
       ref:'User'
     }
   });
