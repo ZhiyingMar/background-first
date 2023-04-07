@@ -8,9 +8,11 @@ const config = require('../utils/config')
 
 // token的截取
 const getTokenFrom = (request) => {
-  const authorization = request?.get("authorization") ?? null;
+  const authorization = request?.get("Authorization") ?? null;
+  
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
-    return authorization.replace('Bearer ', '');
+    console.log("qqq",authorization.replace('Bearer ', ''));
+    return authorization.replace('bearer ', '');
   }
   return null;
 };
@@ -52,10 +54,7 @@ messagesRouter.post("/", async (request, response) => {
     });
     const savedNote = await messgae.save();
   
-    response.json(savedNote);
-  // } catch (error) {
-  //   next(error)
-  // }
+    response.status(201).json(savedNote);
 
 });
 // 删除留言
@@ -100,7 +99,7 @@ messagesRouter.put("/:id", async (request, response, next) => {
   //  message不填写为之前的
   Note.findByIdAndUpdate(request.params.id, messgae, { new: true })
     .then((updatedNote) => {
-      response.json(updatedNote);
+      response.status(201).json(updatedNote);
     })
     .catch((error) => next(error));
 });

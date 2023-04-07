@@ -7,7 +7,7 @@ const unknownEndpoint = (req, res, next) => {
 
 // 问题处理
 const errorHandler=(err, req, res, next)=>{
-
+    console.log("err===>",err);
     switch(err.name){
       case 'TokenExpiredError':
         return res.status(401).json({ error: '登录已过期，请重新登录' });

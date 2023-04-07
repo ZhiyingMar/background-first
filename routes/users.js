@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const usersRouter = require("express").Router();
 const User = require("../models/user");
+const {saltRounds} = require('../utils/config')
 
 // 用户注册
 usersRouter.post("/", async (request, response) => {
@@ -15,7 +16,7 @@ usersRouter.post("/", async (request, response) => {
   }
 
   // 密码加密保存
-  const saltRounds = 10;
+  // const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
   const user = new User({
@@ -23,6 +24,7 @@ usersRouter.post("/", async (request, response) => {
     passwordHash,
   });
   const savedUser = await user.save();
+  
   response.status(201).json(savedUser);
 });
 

@@ -22,7 +22,6 @@ loginRouter.post("/", async (request, response) => {
   
     //  设定过期时间
     const token = jwt.sign(userForToken, config.SECRET,{expiresIn:60*60});
-  
     response
       .status(200)
       .send({ token, username: user.username, userId: user._id});
