@@ -11,7 +11,6 @@ const getTokenFrom = (request) => {
   const authorization = request?.get("Authorization") ?? null;
   
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
-    console.log("qqq",authorization.replace('Bearer ', ''));
     return authorization.replace('bearer ', '');
   }
   return null;
@@ -20,6 +19,7 @@ const getTokenFrom = (request) => {
 messagesRouter.get("/", async (request, response) => {
   const { pageIndex, pageSize } = request.query;
   const messages = await Note.find({})
+    .sort({"date":-1})
     .skip(pageIndex * pageSize)
     .limit(pageSize);
   response.json(messages);
@@ -57,23 +57,24 @@ messagesRouter.post("/", async (request, response) => {
     response.status(201).json(savedNote);
 
 });
+
 // 删除留言
 messagesRouter.delete("/:id", async (request, response, next) => {
   const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
   if (!decodedToken?.id) {
     return response.status(401).json({ error: "请登录" });
   }
-  console.log("demmo");
 
   // 获取当前笔记
   const note = await Note.find({
     user: decodedToken.id,
+    id:request.params.id
   });
   if (note?.length) {
     await Note.findByIdAndRemove(request.params.id);
-    response.status(204).end();
+    return response.status(200).end();
   }
-  response.json({ error: "您没有权限删除该留言" });
+  response.status(500).json({ error: "您没有权限删除该留言" }); 
 });
 // 更新留言
 messagesRouter.put("/:id", async (request, response, next) => {
@@ -82,11 +83,11 @@ messagesRouter.put("/:id", async (request, response, next) => {
   if (!decodedToken?.id) {
     return response.status(401).json({ error: "请登录" });
   }
-  console.log("demmo");
 
   // 获取当前笔记
   const note = await Note.find({
     user: decodedToken.id,
+    id:request.params.id
   });
   if (!note?.length) {
     return response.status(500).json({ error: "您没有权限更改该留言" });
