@@ -22,7 +22,9 @@ messagesRouter.get("/", async (request, response) => {
     .sort({"date":-1})
     .skip(pageIndex * pageSize)
     .limit(pageSize);
-  response.json(messages);
+
+    response.json(messages);
+  
 });
 
 messagesRouter.get("/:id", async (request, response, next) => {

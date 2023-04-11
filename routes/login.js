@@ -20,8 +20,8 @@ loginRouter.post("/", async (request, response) => {
       id: user._id,
     };
   
-    //  设定过期时间
-    const token = jwt.sign(userForToken, config.SECRET,{expiresIn:60*60});
+    //  设定token
+    const token = jwt.sign(userForToken, config.SECRET,{expiresIn:"5d"});
     response
       .status(200)
       .send({ token, username: user.username, userId: user._id});
